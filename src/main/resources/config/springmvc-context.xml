@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+    <!--开启后允许使用Spring AOP的@AspectJ注解 如果是纯xml配置 可以不用开启这个声明
+               注意：因为父子容器的关系，此处配置仅对controller有效-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 第一步：开启注解 -->
+	<mvc:annotation-driven> 
+	<!-- Spring默认装配的MessageConverter
+	
+	   （1）StringHttpMessageConverter
+	   （2）ByteArrayHttpMessageConverter
+	   （3）SourceHttpMessageConverter
+	   （4）XmlAwareFormHttpMessageConverter 
+	    如果存在jackson的包，那么会装配MappingJackson2HttpMessageConverter
+	-->
+	 	<mvc:message-converters register-defaults="true">
+            <!-- 配置Fastjson支持 -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                    <!-- 这里的顺序不能乱，摇先写text/html，不然IE会出现下载提示 -->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <!-- 是否输出值为null的字段,默认为false -->
+                        <value>WriteMapNullValue</value>
+                        <!-- 输出key时是否使用双引号,默认为true -->
+                        <value>QuoteFieldNames</value>
+                        <!-- 字符类型字段如果为null,输出为"",而非null 
+    					<value>WriteNullStringAsEmpty</value>-->
+    					<!-- 数值字段如果为null,输出为0,而非null 
+     					<value>WriteNullNumberAsZero</value> -->
+                    </list>
+                </property>
+            </bean>
+      </mvc:message-converters>
+    </mvc:annotation-driven>
+	<!-- 第二步：扫描注解类，自动扫描@controller注解标注的bean -->
+	<context:component-scan
+		base-package="org.csl.study.spring.source.controller">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+    
+ 
+	<!-- 第三步：配置静态资源 -->
+	<!-- 将静态资源的处理经由Spring MVC框架交回Web应用服务器处理：
+	
+		Tomcat, Jetty, JBoss, and GlassFish  默认 Servlet的名字 — “default” 不需要default-servlet-name指定
+		Google App Engine 默认 Servlet的名字 — “_ah_default”  需要default-servlet-name指定
+		WebLogic 默认 Servlet的名字  — “FileServlet”           需要default-servlet-name指定
+		WebSphere  默认 Servlet的名字 — “SimpleFileServlet”   需要default-servlet-name指定
+
+ -->
+	<mvc:default-servlet-handler default-servlet-name = "default" />
+	
+	<mvc:resources mapping="/static/**"  location="/static/" />
+	
+	<!--  拦截器 多个按顺序拦截 --> 
+	 <mvc:interceptors>
+	 
+	  <mvc:interceptor>
+	   <mvc:mapping path="/**"/>
+	   
+	   <mvc:exclude-mapping path="/static/**"/>
+	   
+	   <bean class="org.csl.study.spring.source.interceptor.LoginHandlerInterceptor"></bean>
+	  
+	  </mvc:interceptor>
+	  
+	 </mvc:interceptors>
+	
+	<!-- 设置freeMarker的配置文件路径 -->
+    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:config/freemarker.properties"/>
+    </bean>
+    <!-- 定义视图文件解析 html专用-->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath">
+            <value>/WEB-INF/template/</value>
+        </property>
+        <!--加载freemarker属性  -->
+        <property name="freemarkerSettings" ref="freemarkerConfiguration"></property>
+    </bean>
+ 
+    <!--配置试图解析器  -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.freemarker.FreeMarkerView</value>
+        </property>
+         <!--多个模板解析器时有用，如同时存在freemarker和Jsp，顺序起作用  -->
+        <property name="order" value="0"></property>
+        <!-- 上面templateLoaderPath已经配置了，所以这里不用配置
+         <property name="prefix" value=""/>
+         -->
+       
+        <property name="suffix" value=".ftl"></property>
+        <property name="contentType" value="text/html;charset=utf-8"></property>
+        <!-- 为了在ftl文件中使用${request.contextPath} -->
+        <property name="requestContextAttribute" value="request"></property>
+    </bean>
+    
+    
+</beans>

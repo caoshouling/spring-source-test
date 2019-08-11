@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!-- 这里不用配置了，因为Maven中添加了依赖 
+  <classPathEntry location="E:/workspace/maven/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+  -->
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+   	  <!-- 生成的Java文件的编码 -->
+	  <property name="javaFileEncoding" value="UTF-8"/>
+	  <commentGenerator>
+	      <property name="suppressDate" value="true"/>
+	            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+	      <property name="suppressAllComments" value="true"/>
+	  </commentGenerator>
+	    
+	  <!-- 在xml的配置文件中 “；”要用 “ &amp;” 代替 -->
+	    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+	        connectionURL="jdbc:mysql://localhost:3306/springmvc?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;useSSL=false"
+	        userId="root"
+	        password="admin">
+	    </jdbcConnection>
+	    
+	    
+	    <!-- 指定生成的类型为java类型，避免数据库中number等类型字段 -->
+	    <javaTypeResolver >
+	      <property name="forceBigDecimals" value="false" />
+	    </javaTypeResolver>
+	
+	    <javaModelGenerator targetPackage="org.csl.study.spring.source.po" targetProject="src/main/java">
+	      <property name="trimStrings" value="true" />
+	         <!-- enableSubPackages:是否让schema作为包的后缀 -->
+	      <property name="enableSubPackages" value="false"/>
+	         <!-- 从数据库返回的值被清理前后的空格 -->
+	      <property name="trimStrings" value="true"/>
+	       <property name="immutable" value="false"/>
+	    </javaModelGenerator>
+	
+	    <sqlMapGenerator targetPackage="spring.source"  targetProject="src/main/resources/mapper">
+	        <!-- enableSubPackages:是否让schema作为包的后缀 -->
+	      <property name="enableSubPackages" value="false" />
+	    </sqlMapGenerator>
+	
+	    <javaClientGenerator type="XMLMAPPER" targetPackage="org.csl.study.spring.source.dao"  targetProject="src/main/java">
+	       <!-- enableSubPackages:是否让schema作为包的后缀 -->
+	      <property name="enableSubPackages" value="false" />
+	    </javaClientGenerator>
+	    <!-- 可以使用tableName="sys_user"  domainObjectName="SysUser"指定名称  -->
+	    <table schema="springmvc" 
+	           tableName="sys_user" 
+	           enableCountByExample="false" 
+	           enableUpdateByExample="false" 
+	           enableDeleteByExample="false" 
+	           enableSelectByExample="false" 
+	           selectByExampleQueryId="false">
+	      <!-- useActualColumnNames 为false ：下划线会变成驼峰形式    -->
+	      <property name="useActualColumnNames" value="false"/> 
+	      <!--使用MySQL的方式生成主键   -->
+	      <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+	       <!--替换掉开头的sys字符 。注意：table中使用了domainObjectName="SysUser"后，这个是不生效的-->
+	      <domainObjectRenamingRule searchString="^Sys" replaceString="" />
+	      <!--  
+	      <columnOverride column="DATE_FIELD" property="startDate" />
+	      <ignoreColumn column="FRED" />
+	      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
+	      
+	    </table>
+
+  </context>
+</generatorConfiguration>

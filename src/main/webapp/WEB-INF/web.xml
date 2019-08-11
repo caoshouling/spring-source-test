@@ -1,0 +1,96 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- ContextLoaderListener监听器的作用就是启动Web容器时，自动装配ApplicationContext的配置信息 1. 
+		ContextLoaderListener中创建ApplicationContext主要用于整个Web应用程序需要共享的一些组件，比如DAO，数据库的ConnectionFactory等。 
+		DispatcherServlet创建的ApplicationContext主要用于和该Servlet相关的一些组件，比如Controller、ViewResovler等。 
+		2.对于作用范围而言，在DispatcherServlet中可以引用由ContextLoaderListener所创建的ApplicationContext，而反过来不行。 -->
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:config/applicationContext*.xml</param-value>
+	</context-param>
+
+	<!-- 字符集过滤器 -->
+    <filter>
+      <filter-name>encodingFilter</filter-name>
+      <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+      <init-param>
+          <param-name>encoding</param-name>
+          <param-value>UTF-8</param-value>
+      </init-param>
+      <init-param>
+          <param-name>forceEncoding</param-name>
+          <param-value>true</param-value>
+      </init-param>
+    </filter>
+    
+    
+    <!--===================DRUID 基本配置====================-->
+	<filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>/static/*,*.css,*.js,*.gif,*.jpg,*.png,*.ico,*.eot,*.svg,*.ttf,*.woff,*.jsp,*.tpl,*.ico,/druid/*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sessionStatEnable</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	<filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <!--这里不能留空或者直接写 ' / ' ，否者不起作用-->
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+   <!--===================servlet - DispatcherServlet====================-->
+	<servlet>
+		<servlet-name>app1</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:config/springmvc-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+    <!--===================servlet - DRUID监控====================-->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <init-param>
+            <!-- 用户名 -->
+            <param-name>loginUsername</param-name>
+            <param-value>admin</param-value>
+        </init-param>
+        <init-param>
+            <!-- 密码 -->
+            <param-name>loginPassword</param-name>
+            <param-value>123456</param-value>
+        </init-param>
+    </servlet>
+    
+    <!--===================servlet-mapping====================-->
+    <servlet-mapping>
+		<servlet-name>app1</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+	
+</web-app>

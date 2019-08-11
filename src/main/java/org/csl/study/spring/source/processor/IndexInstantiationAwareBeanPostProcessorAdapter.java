@@ -15,7 +15,7 @@ public class IndexInstantiationAwareBeanPostProcessorAdapter  extends Instantiat
 	 */
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-		if(beanName.equals("indexService"))
+		if(beanName.equals("indexApplicationContextAware"))
 		System.out.println(this.getClass().getSimpleName()+" - postProcessBeforeInstantiation- :"+beanName);
 		return super.postProcessBeforeInstantiation(beanClass, beanName);
 	}
@@ -25,7 +25,8 @@ public class IndexInstantiationAwareBeanPostProcessorAdapter  extends Instantiat
 	 */
 	@Override
 	public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-		if(beanName.equals("indexService"))System.out.println(this.getClass().getSimpleName()+" - postProcessAfterInstantiation- :"+beanName);
+		if(beanName.equals("indexApplicationContextAware"))
+			System.out.println(this.getClass().getSimpleName()+" - postProcessAfterInstantiation- :"+beanName);
 		return super.postProcessAfterInstantiation(bean, beanName);
 	}
 
@@ -35,7 +36,7 @@ public class IndexInstantiationAwareBeanPostProcessorAdapter  extends Instantiat
 	@Override
 	public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean,
 			String beanName) throws BeansException {
-		if(beanName.equals("indexService"))System.out.println(this.getClass().getSimpleName()+" - postProcessPropertyValues- :"+beanName);
+		if(beanName.equals("indexApplicationContextAware"))System.out.println(this.getClass().getSimpleName()+" - postProcessPropertyValues- :"+beanName);
 		return super.postProcessPropertyValues(pvs, pds, bean, beanName);
 	}
 
@@ -44,7 +45,7 @@ public class IndexInstantiationAwareBeanPostProcessorAdapter  extends Instantiat
 	 */
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		if(beanName.equals("indexService"))System.out.println(this.getClass().getSimpleName()+" - postProcessBeforeInitialization- :"+beanName);
+		if(beanName.equals("indexApplicationContextAware"))System.out.println(this.getClass().getSimpleName()+" - postProcessBeforeInitialization- :"+beanName);
 		return super.postProcessBeforeInitialization(bean, beanName);
 	}
 
@@ -53,7 +54,7 @@ public class IndexInstantiationAwareBeanPostProcessorAdapter  extends Instantiat
 	 */
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		if(beanName.equals("indexService"))System.out.println(this.getClass().getSimpleName()+" - postProcessAfterInitialization- :"+beanName);
+		if(beanName.equals("indexApplicationContextAware"))System.out.println(this.getClass().getSimpleName()+" - postProcessAfterInitialization- :"+beanName);
 		return super.postProcessAfterInitialization(bean, beanName);
 	}
 

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://mybatis.org/schema/mybatis-spring 
+        http://mybatis.org/schema/mybatis-spring-1.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd"> 
+        
+     <!--开启后允许使用Spring AOP的@AspectJ注解 如果是纯xml配置 可以不用开启这个声明
+                   注意：由于父子容器的关系（此处也没有对Controller进行扫描），对controller不起作用，如果要使用，必须在springmvc配置文件中单独配置。-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+	<!-- 自动扫描时跳过@Controller注解 -->
+	<context:component-scan base-package="org.csl.study.spring.source">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+    <!-- 引入配置文件 -->  
+    <bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="location" value="classpath:config/jdbc.properties" />  
+    </bean>  
+  
+          <!-- 数据源配置,使用应用内的DBCP数据库连接池     -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"  init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        
+        <!--初始化时建立物理连接的个数-->
+        <property name="initialSize" value="5"/>
+		<!--最小连接池数量-->
+        <property name="minIdle" value="10"/>
+		<!--最大连接池数量-->
+        <property name="maxActive" value="100"/>
+		<!--连接时最大等待时间,单位毫秒  这里配置了30分钟-->
+        <property name="maxWait" value="900000"/>
+		<!--配置间隔多久才进行一次检测,检测需要关闭的空闲连接,单位是毫秒-->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+		<!--配置一个连接在池中最小生存的时间,单位是毫秒-->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+		<!--用来检测连接是否有效的SQL,要求是一个查询语句-->
+        <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+		<!--申请连接时执行 validationQuery 检测连接是否有效,做了这个配置会降低性能-->
+        <property name="testOnBorrow" value="false"/>
+		<!--归还连接时执行 validationQuery 检测连接是否有效,做了这个配置会降低性能-->
+        <property name="testOnReturn" value="false"/>
+		<!--建议配置为true,不影响性能,并且保证安全性;申请连接的时候检测,如果空闲时间大于
+			timeBetweenEvictionRunsMillis,执行 validationQuery 检测连接是否有效-->
+        <property name="testWhileIdle" value="true"/>
+        <!--是否缓存preparedStatement,也就是 PSCache 
+                              打开PSCache，并且指定每个连接上PSCache的大小 如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。
+                              分库分表较多的数据库，建议配置为false。-->
+        <property name="poolPreparedStatements" value="true"/>
+        <!--指定每个连接上 PSCache 的大小-->
+        <property name="maxOpenPreparedStatements" value="20"/>
+        <!-- 打开清除废弃连接功能 -->  
+        <property name = "removeAbandoned" value = "true"/>  
+        <!--清除废弃连接的超时时间-->
+        <property name="removeAbandonedTimeout" value="1800"/>
+        <!-- 关闭 清除 连接时输出错误日志 -->     
+        <property name = "logAbandoned" value = "true"/> 
+        <!--配置监控统计拦截的filters,属性类型是字符串,通过别名的方式配置扩展插件,
+        	常用的插件有:监控统计用的STAT;防御SQL注入的wall-->
+        <property name="filters" value="stat,wall" />
+        <!--通过 connectProperties 属性来打开mergeSql功能；慢SQL记录-->
+        <property name="connectionProperties" value="druid.stat.merggSql=ture;druid.stat.slowSqlMillis=5000"/>
+        <!--合并多个DruidDataSource的监控数据-->
+        <property name="useGlobalDataSourceStat" value="true"/>
+        
+    </bean>
+    
+    	
+
+    <!-- spring jdbc  NamedParameterJdbcTemplate -->
+    <bean id="namedjdbctemp" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+  
+    <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <!-- 自动扫描mapping.xml文件 -->  
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"></property> 
+    	<!-- mybatis配置文件 -->
+		<property name="configLocation" value="classpath:config/spring-mybatis.xml"></property>
+    </bean>  
+  
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="org.csl.study.spring.source.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean>   
+  
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
+    <bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean> 
+
+	<!-- 如果事务管理id是transactionManager 这里的transactionmanager可以不写-->
+    <tx:annotation-driven  transaction-manager="transactionManager"/>
+    
+</beans>

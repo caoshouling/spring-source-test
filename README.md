@@ -1,2 +1,2 @@
 # spring-source-test
-Spring源码测试类
+使用spring MVC（XML版） + Mybatis + freemarker + Bootstrap 
