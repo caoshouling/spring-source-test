@@ -110,7 +110,7 @@
     
       //请求登入接口
    	  admin.req({
-	        url: '${host}/login' //实际使用请改成服务端真实接口
+	        url: layui.setter.host+'/login' //实际使用请改成服务端真实接口
 	        ,data: data.field
 	        ,method:'post'
 	        ,done: function(res){
@@ -127,7 +127,7 @@
 	            ,icon: 1
 	            ,time: 1000
 	          }, function(){
-	            location.href = '${host}/main'; //后台主页
+	            location.href = layui.setter.host+'/main'; //后台主页
 	          });
        		}
       });

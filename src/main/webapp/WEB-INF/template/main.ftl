@@ -66,7 +66,7 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite>${userName}</cite>
+              <cite>${userName!}</cite>
             </a>
             <dl class="layui-nav-child">
               <dd><a lay-href="${ctx}/static/plugin/layui/views/set/user/info.html">基本资料</a></dd>
@@ -389,7 +389,7 @@
               </a>
               <dl class="layui-nav-child">
                 <dd>
-                  <a lay-href="${ctx}/static/plugin/layui/views/user/user/list.html">网站用户</a>
+                  <a lay-href="${ctx}/user/userlist.html">网站用户</a>
                 </dd>
                 <dd>
                   <a lay-href="${ctx}/static/plugin/layui/views/user/administrators/list.html">后台管理员</a>

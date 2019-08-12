@@ -11,6 +11,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.csl.study.spring.source.dao.provider.UserSqlProvider;
 import org.csl.study.spring.source.po.User;
 
+import com.github.pagehelper.PageRowBounds;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -40,7 +42,7 @@ public interface UserMapper {
     @Results({
 		@Result(column="user_name",property="userName")
     })
-    List<User> findAllWithRowBounds(RowBounds rowBounds);
+    List<User> findAllWithRowBounds(PageRowBounds pageRowBounds);
 
     @Select("select * from sys_user order by id")
     @Results({

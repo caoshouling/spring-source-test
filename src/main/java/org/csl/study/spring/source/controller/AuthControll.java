@@ -54,7 +54,14 @@ public class AuthControll {
     @RequestMapping(value = "/main")
     public String mainPage(Model model){
     	HttpServletRequest request =  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-    	model.addAttribute("userName", ((User)request.getSession().getAttribute(WebConstant.USER_SESSION)).getUserName());
+    	HttpSession session = request.getSession(false);
+    	if(session != null){
+    		User user = ((User)request.getSession().getAttribute(WebConstant.USER_SESSION));
+    		if(user != null){
+    			model.addAttribute("userName", user.getUserName());
+    		}
+    	}
+    	
         return  "main";
     }
     

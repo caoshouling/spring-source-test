@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.github.pagehelper.PageRowBounds;
+
 @Service("UserService")
 public class UserService {
 
@@ -36,9 +38,9 @@ public class UserService {
      * @param rowBounds
      * @return
      */
-	public List<User> getUserList(RowBounds rowBounds) {
+	public List<User> getUserList(PageRowBounds pageRowBounds) {
 		
-		return userMapper.findAllWithRowBounds(rowBounds);
+		return userMapper.findAllWithRowBounds(pageRowBounds);
 	}
 
 	public void register(RegisterVo registerVo) {
