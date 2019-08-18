@@ -7,11 +7,9 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.session.RowBounds;
 import org.csl.study.spring.source.dao.provider.UserSqlProvider;
 import org.csl.study.spring.source.po.User;
-
-import com.github.pagehelper.PageRowBounds;
+import org.csl.study.spring.source.po.UserPageQueryVo;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -38,11 +36,7 @@ public interface UserMapper {
     })
     User selectUserByUserName(@Param("userName")String userName);
     
-    @Select("select * from sys_user order by id")
-    @Results({
-		@Result(column="user_name",property="userName")
-    })
-    List<User> findAllWithRowBounds(PageRowBounds pageRowBounds);
+    List<User> findUserListWithPage(UserPageQueryVo userPageQueryVo);
 
     @Select("select * from sys_user order by id")
     @Results({

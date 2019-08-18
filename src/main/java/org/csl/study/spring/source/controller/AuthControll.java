@@ -10,6 +10,7 @@ import org.csl.study.spring.source.common.JsonResponse;
 import org.csl.study.spring.source.common.WebConstant;
 import org.csl.study.spring.source.common.utils.CodeUtils;
 import org.csl.study.spring.source.po.User;
+import org.csl.study.spring.source.service.MenuService;
 import org.csl.study.spring.source.service.UserService;
 import org.csl.study.spring.source.vo.RegisterVo;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ import cn.hutool.core.util.RandomUtil;
 public class AuthControll {
     @Autowired
 	private UserService userService;
+    @Autowired
+    private MenuService menuService;
     
     /**注意：要使用slf4j的API,SLF4J，即简单日志门面，方便日后切换日志实现*/
     Logger logger = LoggerFactory.getLogger(AuthControll.class);
@@ -59,6 +62,7 @@ public class AuthControll {
     		User user = ((User)request.getSession().getAttribute(WebConstant.USER_SESSION));
     		if(user != null){
     			model.addAttribute("userName", user.getUserName());
+    			model.addAttribute("menuArray", menuService.MenuList(user.getId()));
     		}
     	}
     	
@@ -137,8 +141,8 @@ public class AuthControll {
     		User user2=  userService.getUserByUserNameAndPassword(username,password);       
     		if(user2 != null){
     			//将用户对象添加到Session中
-    			session.setAttribute(WebConstant.USER_SESSION,user);
-    			jsonResponse.data(user).success();
+    			session.setAttribute(WebConstant.USER_SESSION,user2);
+    			jsonResponse.data(user2).success();
     		}else{
     			jsonResponse.error("用户名或密码错误！");
     		}

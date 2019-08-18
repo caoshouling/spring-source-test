@@ -152,4 +152,11 @@ public class User {
     public void setQqOpenid(String qqOpenid) {
         this.qqOpenid = qqOpenid == null ? null : qqOpenid.trim();
     }
+
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", password=" + password + ", phone=" + phone + ", mail=" + mail + "]";
+	}
+    
+    
 }
