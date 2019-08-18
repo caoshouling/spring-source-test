@@ -382,6 +382,7 @@
                 </dd>
               </dl>
             </li>
+            
             <li data-name="user" class="layui-nav-item">
               <a href="javascript:;" lay-tips="用户" lay-direction="2">
                 <i class="layui-icon layui-icon-user"></i>
@@ -389,7 +390,7 @@
               </a>
               <dl class="layui-nav-child">
                 <dd>
-                  <a lay-href="${ctx}/user/userlist.html">网站用户</a>
+                  <a lay-href="${ctx}/user/userlistPage.html">网站用户</a>
                 </dd>
                 <dd>
                   <a lay-href="${ctx}/static/plugin/layui/views/user/administrators/list.html">后台管理员</a>
@@ -399,6 +400,44 @@
                 </dd>
               </dl>
             </li>
+            <#macro menuDefine menuList isRoot = 'true'>
+                <#if menuList?? && menuList?size gt 0>
+                   
+	              	<#list menuList as menu>
+	              	   <#if isRoot == 'true'>
+              	       	 <li data-name="${menu.id}" class="layui-nav-item">
+              	       </#if>
+	              	   <#if menu.childList?? && menu.childList?size gt 0>
+	              	   	 <a href="javascript:;" lay-tips="${menu.name}" lay-direction="2">
+			                <i class="layui-icon layui-icon-user"></i>
+			                <cite>${menu.name}</cite>
+			              </a>
+			              	<@menuDefine menuList=menu.childList  isRoot ='false'/>
+	              	   <#else>
+	              	      <!-- 第一个元素 -->
+	              	      <#if menu_index = 0> 
+	              	         <dl class="layui-nav-child">
+	              	      </#if>
+	              	      <dd>
+			                  <a lay-href="${ctx}/user/userlistPage.html">${menu.name}</a>
+			              </dd>
+			              <!-- 最后一个元素 -->
+			              <#if !menu_has_next> 
+			                  </dl>
+	              	      </#if>
+	              	   </#if>
+	              	   <#if isRoot == 'true'>
+	              	      </li>
+	              	   </#if>
+	              	 </#list>
+	                
+	              
+              	</#if>
+            </#macro>
+            
+             <!-- 调用宏 生成递归树 -->
+       		<@menuDefine menuList=menuArray isRoot = 'true'/>
+            
             <li data-name="set" class="layui-nav-item">
               <a href="javascript:;" lay-tips="设置" lay-direction="2">
                 <i class="layui-icon layui-icon-set"></i>

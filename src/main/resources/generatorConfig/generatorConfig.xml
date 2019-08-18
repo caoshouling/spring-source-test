@@ -48,8 +48,55 @@
 	      <property name="enableSubPackages" value="false" />
 	    </javaClientGenerator>
 	    <!-- 可以使用tableName="sys_user"  domainObjectName="SysUser"指定名称  -->
+	   <!--  <table schema="springmvc" 
+	           tableName="sys_menu" 
+	           enableCountByExample="false" 
+	           enableUpdateByExample="false" 
+	           enableDeleteByExample="false" 
+	           enableSelectByExample="false" 
+	           selectByExampleQueryId="false">
+	      useActualColumnNames 为false ：下划线会变成驼峰形式   
+	      <property name="useActualColumnNames" value="false"/> 
+	      使用MySQL的方式生成主键  
+	      <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+	       替换掉开头的sys字符 。注意：table中使用了domainObjectName="SysUser"后，这个是不生效的
+	      <domainObjectRenamingRule searchString="^Sys" replaceString="" />
+	       
+	      <columnOverride column="DATE_FIELD" property="startDate" />
+	      <ignoreColumn column="FRED" />
+	      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+	      
+	    </table>
+	     <table schema="springmvc" 
+	           tableName="sys_role" 
+	           enableCountByExample="false" 
+	           enableUpdateByExample="false" 
+	           enableDeleteByExample="false" 
+	           enableSelectByExample="false" 
+	           selectByExampleQueryId="false">
+	      useActualColumnNames 为false ：下划线会变成驼峰形式   
+	      <property name="useActualColumnNames" value="false"/> 
+	      使用MySQL的方式生成主键  
+	      <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+	       替换掉开头的sys字符 。注意：table中使用了domainObjectName="SysUser"后，这个是不生效的
+	      <domainObjectRenamingRule searchString="^Sys" replaceString="" />
+	    
+	    </table>-->
 	    <table schema="springmvc" 
-	           tableName="sys_user" 
+	           tableName="sys_role_menu" 
+	           enableCountByExample="false" 
+	           enableUpdateByExample="false" 
+	           enableDeleteByExample="false" 
+	           enableSelectByExample="false" 
+	           selectByExampleQueryId="false">
+	        <!-- useActualColumnNames 为false ：下划线会变成驼峰形式   -->
+	      <property name="useActualColumnNames" value="false"/> 
+	        <!--  替换掉开头的sys字符 。注意：table中使用了domainObjectName="SysUser"后，这个是不生效的-->
+	      <domainObjectRenamingRule searchString="^Sys" replaceString="" />
+	    
+	    </table> 
+	    <table schema="springmvc" 
+	           tableName="sys_user_role" 
 	           enableCountByExample="false" 
 	           enableUpdateByExample="false" 
 	           enableDeleteByExample="false" 
@@ -58,14 +105,10 @@
 	      <!-- useActualColumnNames 为false ：下划线会变成驼峰形式    -->
 	      <property name="useActualColumnNames" value="false"/> 
 	      <!--使用MySQL的方式生成主键   -->
-	      <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+	     
 	       <!--替换掉开头的sys字符 。注意：table中使用了domainObjectName="SysUser"后，这个是不生效的-->
 	      <domainObjectRenamingRule searchString="^Sys" replaceString="" />
-	      <!--  
-	      <columnOverride column="DATE_FIELD" property="startDate" />
-	      <ignoreColumn column="FRED" />
-	      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
-	      
+	    
 	    </table>
 
   </context>

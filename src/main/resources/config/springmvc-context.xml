@@ -116,5 +116,15 @@
         <property name="requestContextAttribute" value="request"></property>
     </bean>
     
+    <!--在Spring3.1之后，Spring内置了两种MultipartResolver的实现：
+
+		CommonsMultipartResolver：使用了Jakarta Commons FileUpload来解析
+		StandardServletMultipartResolver：基于Serlvet3.0对multipart的支持 -->
+
+    <!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+    
     
 </beans>

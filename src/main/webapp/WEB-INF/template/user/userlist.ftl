@@ -27,13 +27,13 @@
           <div class="layui-inline">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-block">
-              <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+              <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">邮箱</label>
             <div class="layui-input-block">
-              <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
+              <input type="text" name="mail" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
@@ -128,7 +128,7 @@
         layer.open({
           type: 2
           ,title: '添加用户'
-          ,content: 'userform.html'
+          ,content: layui.setter.host + '/user/userform.html'
           ,maxmin: true
           ,area: ['500px', '450px']
           ,btn: ['确定', '取消']

@@ -64,6 +64,17 @@
 			<param-value>classpath:config/springmvc-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<!-- Spring MVC文件上传有两种方式：commons FileUpload方式（需要apache的包） 和 servlet3.0方式（原生支持）
+		     servlet方式需要配置<multipart-config>
+		 -->
+		<multipart-config>
+		     <!--文件大小为2M-->
+            <max-file-size>20848820</max-file-size>
+            <!--整个请求不超过4M-->
+            <max-request-size>418018841</max-request-size>
+            <!-- 设置文件缓存的临界点,超过100k则先保存到临时目录 -->
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config> 
 	</servlet>
 	
     <!--===================servlet - DRUID监控====================-->

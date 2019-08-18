@@ -16,7 +16,7 @@ layui.define(['table', 'form'], function(exports){
   //用户管理
   table.render({
     elem: '#LAY-user-manage'
-    ,url: layui.setter.host + '/userlist' //模拟接口
+    ,url: layui.setter.host + '/user/userlist' //模拟接口
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'id', width: 100, title: 'ID', sort: true}
@@ -28,10 +28,32 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'createTime', title: '加入时间', sort: true}
       ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-useradmin-webuser'}
     ]]
+    ,where: {}
     ,page: true
-    ,limit: 30
+    ,request: {
+        pageName: 'pageNum' //页码的参数名称，默认：page
+       ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+     }
+     ,response: {
+    	 statusName: 'status' //规定数据状态的字段名称，默认：code
+        ,statusCode: 0 //规定成功的状态码，默认：0
+        ,msgName: 'statusDesc' //规定状态信息的字段名称，默认：msg
+        ,countName: 'total' //规定数据总数的字段名称，默认：count
+        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+     }
+     ,parseData: function(res){ //res 即为原始返回的数据
+    	console.log("返回数据：",res);
+	    return {
+	      "status": res.status, //解析接口状态
+	      "statusDesc": res.message, //解析提示文本
+	      "total": res.data.total, //解析数据长度
+	      "data": res.data.list //解析数据列表
+	    };
+	 }
+    ,limit: 5
+    ,limits: [5,10, 15, 20]
     ,height: 'full-220'
-    ,text: '对不起，加载出现异常！'
+    ,text: {none : "无记录"}
   });
   
   //监听工具条
